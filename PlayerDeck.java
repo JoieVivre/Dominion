@@ -3,7 +3,7 @@ import java.util.*;
 
 public class PlayerDeck
 {
-   private final String playerName; //arraylist that holds Card objects
+   private String playerName; //arraylist that holds Card objects
    private ArrayList<Card> deck; //arraylist that holds Card objects
    private ArrayList<Card> workingDeck; //arraylist that holds Card objects currently in player's hand
    private ArrayList<Card> discardDeck; //arraylist that holds Card objects in discard pile
@@ -45,7 +45,9 @@ public class PlayerDeck
    public void decBuy(){
       numBuys--;
    }
-   
+   public void setPlayerName(String name){
+      playerName = name;
+   }
    public String playerName(){
       return playerName;
    }
@@ -58,6 +60,10 @@ public class PlayerDeck
    public int deckSize(){
       return deck.size();
    }
+   public int workDeckSize(){
+      return workingDeck.size();
+   }
+   
    //determines if there are any action cards in workingDeck
    public boolean actionStart(){
       for(int i = 0; i < workingDeck.size(); i++){
@@ -69,6 +75,12 @@ public class PlayerDeck
    public boolean buyStart(){
       for(int i = 0; i < workingDeck.size(); i++){
          if(workingDeck.get(i).getType() == 1)return true;
+      }
+      return false;
+   }
+   public boolean attackProtection(){
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getName().equals("Moat"))return true;
       }
       return false;
    }
@@ -181,7 +193,7 @@ public class PlayerDeck
    public void printWorkingDeck(){
          System.out.println();
        for(int i = 0; i < workingDeck.size(); i++){
-            System.out.println("\t" + workingDeck.get(i).toString());
+            System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());
       }  
    }     
    //does the working deck contain that type of card --> similar to actionStart, butStart
@@ -195,7 +207,7 @@ public class PlayerDeck
    public void printWorkingDeck(int type){
          System.out.println();
        for(int i = 0; i < workingDeck.size(); i++){
-            if(workingDeck.get(i).getType() == type){System.out.println("\t" + workingDeck.get(i).toString());}
+            if(workingDeck.get(i).getType() == type){System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());}
       }  
    }     
    //used at games conclusion to determine winner and show victory cards

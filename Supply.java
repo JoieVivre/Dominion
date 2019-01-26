@@ -6,11 +6,15 @@ public class Supply
 {
    private Deck[] supply; //array of deck objects, holds all the piles of cards ever used in game
    private ArrayList<Card> trashDeck;
-
-   public Supply(){
+   private boolean attackCard;
+   public ArrayList<String> attackCounter;
+      
+   public Supply(int numberPlayers){
             
       trashDeck = new ArrayList<Card>();
-      supply = new Deck[15];
+      supply = new Deck[16];
+      attackCard = false;
+      attackCounter = new ArrayList<String>();  
       
       //add curse deck in      
       Deck copperDeck = new Deck(60, 1, "Copper", 1, 0);              
@@ -19,9 +23,13 @@ public class Supply
       supply[1] = silverDeck;
       Deck goldDeck = new Deck(30, 1, "Gold", 3, 6);
       supply[2] = goldDeck;
-                        
-      Deck estateDeck = new Deck(14, 2, "Estate", 1, 2);  
+
+      Deck estateDeck;
+      if(numberPlayers == 2){estateDeck = new Deck(14, 2, "Estate", 1, 2);}                        
+      else if(numberPlayers == 3){estateDeck = new Deck(17, 2, "Estate", 1, 2);}                  
+      else {estateDeck = new Deck(20, 2, "Estate", 1, 2);}                  
       supply[3] = estateDeck;            
+      
       Deck duchyDeck = new Deck(8, 2, "Duchy", 3, 5);  
       supply[4] = duchyDeck;
       Deck provinceDeck = new Deck(8, 2, "Province", 6, 8);
@@ -31,24 +39,34 @@ public class Supply
       supply[6] = cellarDeck;
       Deck moatDeck = new Deck(8, 3, "Moat", 0, 2);  
       supply[7] = moatDeck;
-      Deck smithyDeck = new Deck(8, 3, "Smithy", 0, 4);
-      supply[8] = smithyDeck;            
       Deck villageDeck = new Deck(8, 3, "Village", 0, 3);
-      supply[9] = villageDeck;            
+      supply[8] = villageDeck;            
       Deck woodcutterDeck = new Deck(8, 3, "Woodcutter", 0, 3);
-      supply[10] = woodcutterDeck;            
-      Deck marketDeck = new Deck(8, 3, "Market", 0, 5);
-      supply[11] = marketDeck;            
+      supply[9] = woodcutterDeck;            
       Deck workshopDeck = new Deck(8, 3, "Workshop", 0, 3);
-      supply[12] = workshopDeck;            
+      supply[10] = workshopDeck;            
       Deck remodelDeck = new Deck(8, 3, "Remodel", 0, 4);
-      supply[13] = remodelDeck;            
+      supply[11] = remodelDeck;            
+      Deck smithyDeck = new Deck(8, 3, "Smithy", 0, 4);
+      supply[12] = smithyDeck;            
+      Deck militiaDeck = new Deck(8, 3, "Militia", 0, 4);
+      supply[13] = militiaDeck;            
+      Deck marketDeck = new Deck(8, 3, "Market", 0, 5);
+      supply[14] = marketDeck;            
       Deck mineDeck = new Deck(8, 3, "Mine", 0, 5);
-      supply[14] = mineDeck;            
+      supply[15] = mineDeck;            
                   
    
    }//Supply
    
+   public boolean attackOn(){
+      return attackCard;
+   }
+
+   public void setAttack(boolean status){
+      attackCard = status;
+   }
+
    //returns a deck in the supply --> used to deal out cards in other methods
    public Deck returnDeck(int i){
       return supply[i];
@@ -65,6 +83,7 @@ public class Supply
          if((buyPower >= supply[i].getCost()) && (supply[i].cardsRemaining() > 0)){
             System.out.println("\t" + supply[i].getName() + "  cost-" + supply[i].getCost());
          }
+         if((i == 2) || (i == 5)){System.out.println();}
       }
    }
    public void canBeBought2(int buyPower, int type){
@@ -97,7 +116,7 @@ public class Supply
    public boolean supply3PilesEmpty(){
       int emptyPiles = 0;
       for(int i = 0; i < supply.length; i++){
-         if(supply[i].cardsRemaining() == 0){emptyPiles++;}
+         if(supply[i].cardsRemaining() <= 0){emptyPiles++;}
       }   
       return emptyPiles >= 3;
    }

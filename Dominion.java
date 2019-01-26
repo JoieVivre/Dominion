@@ -3,27 +3,40 @@ import java.util.*;
 
 public class Dominion{
 
-   public static void play(String p1, String p2)
+   public static void play(int numOfPlayers, ArrayList<String> currentPlayerNames)
    {
       Scanner input = new Scanner (System.in);
       
-      Supply thisGame = new Supply();
-      PlayerDeck player1 = new PlayerDeck(p1);
-      PlayerDeck player2 = new PlayerDeck(p2);
-      
-      //building initial decks
-      for(int i = 1; i < 8; i++){
-         player1.addCard(thisGame.returnDeck(0).dealCard());
-         player2.addCard(thisGame.returnDeck(0).dealCard());
-      }
-      for(int i = 1; i < 4; i++){
-         player1.addCard(thisGame.returnDeck(3).dealCard());
-         player2.addCard(thisGame.returnDeck(3).dealCard());
-      }
-      player1.shuffleStart();
-      player2.shuffleStart();
-      //only happens once
+      Supply thisGame = new Supply(numOfPlayers);
+      PlayerDeck player1 = new PlayerDeck(currentPlayerNames.get(0));
+      PlayerDeck player2 = new PlayerDeck(currentPlayerNames.get(1));
+      PlayerDeck player3 = new PlayerDeck("temp");
+      PlayerDeck player4 = new PlayerDeck("temp");
 
+      for(int i = 1; i < 8; i++){
+            player1.addCard(thisGame.returnDeck(0).dealCard());         
+            player2.addCard(thisGame.returnDeck(0).dealCard());         
+        }
+       for(int i = 1; i < 4; i++){
+           player1.addCard(thisGame.returnDeck(3).dealCard());
+           player2.addCard(thisGame.returnDeck(3).dealCard());
+         }     
+         player1.shuffleStart();
+         player2.shuffleStart();
+
+      if(numOfPlayers > 2){
+            player3.setPlayerName(currentPlayerNames.get(2));
+            for(int i = 1; i < 8; i++){player3.addCard(thisGame.returnDeck(0).dealCard());}
+            for(int i = 1; i < 4; i++){player3.addCard(thisGame.returnDeck(3).dealCard());}     
+            player3.shuffleStart();
+      }
+      if(numOfPlayers > 3){
+            player4.setPlayerName(currentPlayerNames.get(3));
+            for(int i = 1; i < 8; i++){player4.addCard(thisGame.returnDeck(0).dealCard());}
+            for(int i = 1; i < 4; i++){player4.addCard(thisGame.returnDeck(3).dealCard());}     
+            player4.shuffleStart();
+      }
+      
       PlayerDeck whosTurn = new PlayerDeck("blank");
       //String whosTurn = "player1";
       whosTurn = player1;
@@ -36,6 +49,61 @@ public class Dominion{
                   whosTurn.dealCard();
                }                  
 //create method to deal specified number of cards         
+               //check for attackCard
+               if(!thisGame.attackCounter.isEmpty()){
+               
+               //pull first 2 charcters from String
+               //process ArrayList
+               for(int i = 0; i < thisGame.attackCounter.size(); i++){
+                  
+                  String attackName = thisGame.attackCounter.get(i);
+                  int attackCount = Integer.valueOf(attackName.substring(0,1));
+                  attackName = attackName.substring(1);
+ 
+                  if(attackCount < numOfPlayers){
+                     attackCount++;
+                     
+                     if(!whosTurn.attackProtection()){
+                        System.out.println("You are not protected from the previous " + attackName + " attack card");
+                                                
+                        //specific for militia
+                        //only do if whosTurn has at least 4 cards
+                        for(int j = 1; j < 3; j++){
+                        
+                           if(whosTurn.workDeckSize() > 3){
+                              whosTurn.printWorkingDeck();
+                              System.out.print("Which card will you discard? Your current hand is above: ");
+                              int attackChoice = input.nextInt();
+                              
+                              whosTurn.addDiscard(whosTurn.dealCard(attackChoice));
+                                                         
+                           }
+                           else{
+                           System.out.println(".....but you're already down to 3 cards in your hand.");
+                           }
+                           
+                        }
+                     }
+                     else{//have protection
+                         // attackCount++;
+                          System.out.println("You are protected from the previous " + attackName + " attack card");
+                     }
+                     
+                     
+                     attackName = attackCount + attackName;
+                     //System.out.println("\t\tAttckName string is: " + attackName);
+                     thisGame.attackCounter.set(i, attackName);
+                  }//attackCount <2
+                  else{
+                     thisGame.attackCounter.remove(i);
+                     i--;
+                  }
+               
+               }//for loop
+               
+                  
+               }//attack on
+               
                
                //pass to playerTurn method, ACTION and BUY happen there
                whosTurn.setAB(1, 1);
@@ -44,32 +112,56 @@ public class Dominion{
                //CLEANUP
                System.out.println("CLEANUP: cards moved to discard pile");
                whosTurn.cleanUpPhase();
-//with militia will need to decrease cards of opponents --> could deal cards now or do some kind of flag               
+
                System.out.println();
                System.out.println();
                
                //END OF TURN ALGORITHM
                turns++;
+               
+               if(numOfPlayers == 2){
+                  if(whosTurn == player1){whosTurn = player2;}
+                  else{whosTurn = player1;}
+               }
+               else if(numOfPlayers == 3){
+                  if(whosTurn == player1){whosTurn = player2;}
+                  else if(whosTurn == player2){whosTurn = player3;}
+                  else{whosTurn = player1;}
+               }
+               else{
+                  if(whosTurn == player1){whosTurn = player2;}
+                  else if(whosTurn == player2){whosTurn = player3;}
+                  else if(whosTurn == player3){whosTurn = player4;}
+                  else {whosTurn = player1;}
+               }
+               /*
                if(turns % 2 == 0){
                whosTurn = player2;
                }
                else{
                whosTurn = player1;
-               }                        
+               } */
+               
          }while((thisGame.haveProvince()) && (!thisGame.supply3PilesEmpty()));   
-         /* how game would actually end
-         (thisGame.haveProvince()) && (!thisGame.supply3PilesEmpty())
-         
-         }while((provinceDeck.cardsRemaining() > 0)  && 
-               ((cellarDeck.cardsRemaining() > 0) || (moatDeck.cardsRemaining() > 0) || (cellarDeck.cardsRemaining() > 0))); 
-          
-          (thisGame.returnDeck(5).cardsRemaining() > 0)
-          
-          */
       
 //after end of turns need to summarize decks, who had most number of victory points
+//      int winner = 0;
+  //    String winner = "";
+      
       System.out.println(player1.playerName() + " your score was: " + player1.victoryPoints());
+      System.out.println();
       System.out.println(player2.playerName() + " your score was: " + player2.victoryPoints());
+      System.out.println();      
+      
+      if(numOfPlayers > 2){
+         System.out.println(player3.playerName() + " your score was: " + player3.victoryPoints());
+         System.out.println();      
+      }
+      if(numOfPlayers > 3){
+         System.out.println(player4.playerName() + " your score was: " + player4.victoryPoints());
+         System.out.println();      
+      }
+      
       //System.out.println(player1.VictoryPoints() > player2.VictoryPoints() ? );
    }//end of play
      
@@ -97,6 +189,19 @@ public class Dominion{
                System.out.println("MOAT: \n2 cards have been added to your hand");
                //add 2 cards to working Deck            
                for(int i = 1; i < 3; i++){whosTurn.dealCard();}              
+            }            
+            else if(actionChoice.equals("Militia")){
+               //move moat from working Deck to discard   
+               whosTurn.decAction();
+               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));//moved to discard
+   
+               System.out.println("MILITIA: \nyou gained 2 additional coins to buy with");
+               System.out.println("other players will have to discard down to 3 cards if they don't have protection");
+               //add 2 coins, set attack to on
+               holdoverCoins += 2;
+               //could add player's name to String
+               checkSupply.attackCounter.add("1Militia");
+               //checkSupply.setAttack(true);
             }
             else if(actionChoice.equals("Market")){
                //move moat from working Deck to discard   
@@ -174,7 +279,7 @@ public class Dominion{
                System.out.println("REMODEL: \nTrash a card from you hand, gain a card costing up to 2 more coins than trashed card");
                //add card to trash, gain additional card            
                whosTurn.printWorkingDeck();
-               System.out.print("Which card will you trash (1st card = 0, 2nd = 1, ..)? Your current hand is above: ");
+               System.out.print("Which card will you trash? Your current hand is above: ");
                int remodelChoice = input.nextInt();               
                //trashing one card
                Card remodelTemp = new Card();
@@ -198,8 +303,8 @@ public class Dominion{
                
                //check that there are treasure cards
                if(whosTurn.workingDeckType(1)){
-                  whosTurn.printWorkingDeck();
-                  System.out.print("Which card will you trash (1st card = 0, 2nd = 1, ..)? Your current hand is above: ");
+                  whosTurn.printWorkingDeck(1);
+                  System.out.print("Which card will you trash? Your current hand is above: ");
                   int mineChoice = input.nextInt();               
                   //trashing one card, still on honor system
                   Card mineTemp = new Card();
