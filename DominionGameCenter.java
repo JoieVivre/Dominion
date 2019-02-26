@@ -24,30 +24,28 @@ public class DominionGameCenter extends Dominion
       System.out.println();
       
       
-      System.out.println("\tWhich KINGDOM decks do you want?");
+      System.out.println("\tWhich 10 KINGDOM decks do you want?");
       System.out.println("\tAvailable KINGDOM choices -->");
-      //H-cHapel 
-      //N-ChaNcellor
-      //B-Bureaucrat
-      //G-Gardens
-      //E-Moneylender
-      //P-SPy
-      //T-Thief
-      //D-throne room
-            //U-coUncil Room
-      //L-Laboratory            
-      //Z-witch
-      //A-Adventurer
-                        
-      System.out.println("Cost 2 Coins:\n\tC-Cellar \n\tM-Moat");
-      System.out.println("Cost 3 Coins:\n\tV-Village \n\tW-Woodcutter \n\tO-wOrkshop");
-      System.out.println("Cost 4 Coins:\n\tF-Feast \n\tI-mIlitia \n\tR-Remodel \n\tS-Smithy");      
-      System.out.println("Cost 5 Coins:\n\tQ-festival \n\tX-library \n\tK-marKet \n\tY-mine");      
       
-      System.out.println("Enter the capital letter associated with the KINGDOM pile followed by the next capital letter:");
-      System.out.println("FOR EXAMPLE: first game would be - CKIYMRSVWO");
+      //G-Gardens
+      //D-throne room
+   
+      System.out.println("Cost 2 Coins:\n\tC-Cellar \n\tH-cHapel \n\tM-Moat");
+      System.out.println("Cost 3 Coins:\n\tV-Village \n\tW-Woodcutter \n\tO-wOrkshop \n\tN-chaNcellor");
+      System.out.println("Cost 4 Coins:\n\tB-Bureaucrat \n\tF-Feast \n\tI-mIlitia \n\tE-monEylender \n\tR-Remodel \n\tS-Smithy \n\tP-sPy \n\tT-Thief");      
+      System.out.println("Cost 5 Coins:\n\tU-coUncil Room \n\tQ-festival \n\tL-Laboratory \n\tX-library \n\tK-marKet \n\tY-mine \n\tZ-witch");      
+      System.out.println("Cost 6 Coins:\n\tA-Adventurer");      
 
-      String kingdomChoices = input.next();
+      String kingdomChoices;
+      
+      do{
+         System.out.println("Enter the capital letter associated with each KINGDOM pile, pick 10 capital letters:");
+         System.out.println("FOR EXAMPLE: first game would be - CKIYMRSVWO");
+   
+         kingdomChoices = input.next();
+      }while(kingdomChoices.length() != 10);
+      
+      
       
       
       play(numPlayers, playerNames, kingdomChoices);

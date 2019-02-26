@@ -1,6 +1,5 @@
 public class Card
-{
-   
+{  
    public final static int TREASURE = 1; //Codes for four main types of card
    public final static int VICTORY = 2;
    public final static int KINGDOM = 3; 

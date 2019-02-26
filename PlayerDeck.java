@@ -1,13 +1,12 @@
 //C. Atkinson
 import java.util.*;
 
-public class PlayerDeck
-{
-   private String playerName; //arraylist that holds Card objects
+public class PlayerDeck{
+   private String playerName;
    private ArrayList<Card> deck; //arraylist that holds Card objects
    private ArrayList<Card> workingDeck; //arraylist that holds Card objects currently in player's hand
+   private ArrayList<Card> playArea;//arraylist that holds Card objects that have been played
    private ArrayList<Card> discardDeck; //arraylist that holds Card objects in discard pile
-   private ArrayList<Card> playArea;//arraylist that holds Card objects currently in play
    private int numActions;
    private int numBuys;
    private int cardsAvailable; //cards left in the deck
@@ -23,47 +22,26 @@ public class PlayerDeck
       cardsAvailable = deck.size();
    }//PlayerDeck
     
-  //used in initial deck building, one time only          
-   public void addCard(Card a){
+   public void addCard(Card a){  //used in initial deck building, one time only          
       deck.add(a);
       cardsAvailable++;
    }
-    //used to add a bought card to discard pile
-   public void addDiscard(Card a){
+   public void addDiscard(Card a){ //used to add a bought card to discard pile
       discardDeck.add(a);
-      System.out.println(a + " added to discard pile.");
+      System.out.println("\t" + playerName + " " + a + " was added to discard pile.");
    } 
    public boolean attackProtection(){
       for(int i = 0; i < workingDeck.size(); i++){
-         if(workingDeck.get(i).getName().equals("Moat"))return true;
+         if(workingDeck.get(i).getName().equals("Moat"))
+            return true;
       }
       return false;
    }
-   //add a card directly to working deck 
-   public void addToWorkDeck(Card a){
+   public void addToWorkDeck(Card a){  //add a card directly to working deck 
       workingDeck.add(a);
    }
-  
-  
-//COMBINE THE NEXT TWO METHODS
-   public boolean actionStart(){
-      for(int i = 0; i < workingDeck.size(); i++){
-         if(workingDeck.get(i).getType() == 3)return true;
-      }
-      return false;
-   }
-   //determines if there are any action cards in workingDeck
-   public boolean buyStart(){
-      for(int i = 0; i < workingDeck.size(); i++){
-         if(workingDeck.get(i).getType() == 1)return true;
-      }
-      return false;
-   }
-   
-   
-   
-   //buying power of current workingDeck
-    public int buyingPower(){
+
+   public int buyingPower(){   //buying power of current workingDeck
       int buyPower = 0;
       for(int i = 0; i < workingDeck.size(); i++){
          if(workingDeck.get(i).getType() == 1){
@@ -73,12 +51,11 @@ public class PlayerDeck
       return buyPower;
    }
    
-   
-     
    //returns index of Card in workingDeck with matching name, used with cardPlayed method
    public int cardMatch(String checkName){
       for(int i = 0; i < workingDeck.size(); i++){
-         if(workingDeck.get(i).getName().equals(checkName))return i;
+         if(workingDeck.get(i).getName().equals(checkName))
+            return i;
       }
       return -1;   
    }
@@ -91,22 +68,21 @@ public class PlayerDeck
    //at the end of a player's turn, move everything that was played + left overs in working deck --> into discard pile
    public void cleanUpPhase(){
       for(int i = 0; i < workingDeck.size(); i++){
-            discardDeck.add(workingDeck.get(i));
+         discardDeck.add(workingDeck.get(i));
       }
       for(int i = 0; i < playArea.size(); i++){
-            discardDeck.add(playArea.get(i));
+         discardDeck.add(playArea.get(i));
       }
       workingDeck.clear();
       playArea.clear();  
    }
-  
    public void clearWorkingDeck(){
       workingDeck.clear();
    }
-
    public void clearDiscardDeck(){
       discardDeck.clear();
    }
+   
    //return card from working deck w method --> to trash, remove from working deck
    public Card dealCard(int i){
       Card temp = new Card();
@@ -114,11 +90,9 @@ public class PlayerDeck
       workingDeck.remove(i);
       return temp; 
    }
-   
-   //only for moving cards from deck to workingDeck
-   public void dealCard(){
+   public void dealCard(){   //only for moving cards from deck to workingDeck
       cardsAvailable--;
-
+   
       if(cardsAvailable < 0){
          //error handling if no more in deck
          System.out.println("\tNo more cards in deck.");
@@ -126,10 +100,17 @@ public class PlayerDeck
          shuffle();//transferring discard to deck         
          cardsAvailable--;
       }
-         workingDeck.add(deck.get(cardsAvailable));
-         deck.remove(cardsAvailable);      
+      workingDeck.add(deck.get(cardsAvailable));
+      deck.remove(cardsAvailable);      
    }
-    
+   public void deckToDiscard(){//moves deck to discard pile
+   
+      for(int i = 0; i < deck.size(); i++){
+         discardDeck.add(deck.get(i));
+      }
+      deck.clear();
+      cardsAvailable = deck.size();   
+   }
    public void decAction(){
       numActions--;
    }
@@ -139,6 +120,7 @@ public class PlayerDeck
    public int deckSize(){
       return deck.size();
    } 
+   
    public void incAction(){
       numActions++;
    }
@@ -155,27 +137,34 @@ public class PlayerDeck
       return playerName;
    }
    
-   //prints directly to screen
-   public void printWorkDeckLast(){
-         System.out.println();
-         System.out.println("\t " + workingDeck.get(workingDeck.size()-1).toString());
+   public void printWorkDeckLast(){//prints directly to screen
+      System.out.println();
+      System.out.println("\t " + workingDeck.get(workingDeck.size()-1).toString());
    }
+   
    public void printWorkingDeck(){
-         System.out.println();
-       for(int i = 0; i < workingDeck.size(); i++){
+      System.out.println();
+      for(int i = 0; i < workingDeck.size(); i++){
+         System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());
+      }  
+   }     
+   public void printWorkingDeck(int type){//prints a specific type of card directly to screen
+      System.out.println();
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getType() == type){System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());}
+      }  
+   }     
+   public boolean printWorkingDeckLast2(){//prints a specific type of card directly to screen
+      boolean thief = false;
+      System.out.println();
+      for(int i = workingDeck.size()-2; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getType() == 1){
             System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());
-      }  
-   }     
-   //prints a specific type of card directly to screen
-   public void printWorkingDeck(int type){
-         System.out.println();
-       for(int i = 0; i < workingDeck.size(); i++){
-            if(workingDeck.get(i).getType() == type){System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());}
-      }  
-   }     
-   
-  
-   
+            thief = true;
+         }
+      }
+      return thief;
+   }
    public void setAB(int a, int b){
       numActions = a;
       numBuys = b;
@@ -186,13 +175,9 @@ public class PlayerDeck
    public void setB(int b){
       numBuys = b;
    }
-   
    public void setPlayerName(String name){
       playerName = name;
    }
-   
-   
-  
    //only shuffles discardDeck and then puts shuffled deck into deck, called from dealCard method
    public void shuffle(){
       int random;
@@ -212,10 +197,7 @@ public class PlayerDeck
       cardsAvailable = deck.size();
       discardDeck.clear();      
    }//shuffle end
-  
-  
-   //used once at game start to shuffle first deck
-   public void shuffleStart(){
+   public void shuffleStart(){   //used once at game start to shuffle first deck
       int random;
       Card temp = new Card();
       
@@ -225,67 +207,84 @@ public class PlayerDeck
          deck.set(random, deck.get(i));
          deck.set(i, temp);         
       }//for, actaully shuffling
-
+   
       cardsAvailable = deck.size();
    }//shuffleStart end
   
    //used at games conclusion to determine winner and show victory cards
    public int victoryPoints(){
-   int vPoints = 0;
+      int vPoints = 0;
       for(int i = 0; i < deck.size(); i++){
          if(deck.get(i).getType() == 2){
-         vPoints += deck.get(i).getValue();
-         System.out.println(deck.get(i).toString());
+            vPoints += deck.get(i).getValue();
+            System.out.println(deck.get(i).toString());
          }
       }
       for(int i = 0; i < discardDeck.size(); i++){
          if(discardDeck.get(i).getType() == 2){
-         vPoints += discardDeck.get(i).getValue();
-         System.out.println(discardDeck.get(i).toString());         
+            vPoints += discardDeck.get(i).getValue();
+            System.out.println(discardDeck.get(i).toString());         
+         }
+      }
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getType() == 2){
+            vPoints += workingDeck.get(i).getValue();
+            System.out.println(workingDeck.get(i).toString());         
          }
       }   
       return vPoints;
    }
   
-  public int workDeckSize(){
+   public int workDeckSize(){
       return workingDeck.size();
    }
-
-   public boolean workDeckLastCard(){
-      if(workingDeck.get(workingDeck.size()-1).getType() == 3){return true;}
+   public boolean workDeckLastCard(int type){
+      if(workingDeck.get(workingDeck.size()-1).getType() == type){
+         return true;}
       
       return false;
-      }
-
-   //add last card in workingDeck to discardDeck  
-   public void work2Discard(){
-      discardDeck.add(workingDeck.get(workingDeck.size()-1));                  
+   }
+    public void work2Deck(){//add last card in workingDeck back to Deck, used with Spy Kingdom card  
+      deck.add(workingDeck.get(workingDeck.size()-1));                  
+      cardsAvailable++;
       workingDeck.remove(workingDeck.size()-1);
-      }
+   }
 
-
+   public void work2Discard(){//add last card in workingDeck to discardDeck  
+      Card temp = workingDeck.get(workingDeck.size()-1);
+      discardDeck.add(temp);                  
+      System.out.println("\t" + playerName + " " + temp + " was added to discard pile.");
+      workingDeck.remove(workingDeck.size()-1);
+   }
    //pulls a specific type of card to the discard pile, returns the number of cards pulled
    public int workDiscard(int type){
-         int numCards = 0;
-         for(int i = 0; i < workingDeck.size(); i++){
-            if(workingDeck.get(i).getType() == type){
-                  discardDeck.add(workingDeck.get(i));
-                  numCards++;
-                  workingDeck.remove(i);
-                  i--;
-            }
+      int numCards = 0;
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getType() == type){
+            discardDeck.add(workingDeck.get(i));
+            System.out.println("\t" + playerName + " " + workingDeck.get(i) + " was added to discard pile.");
+            numCards++;
+            workingDeck.remove(i);
+            i--;
          }
-         //will recheck the index number again if it removed something there
-         return numCards;   
       }
-   //does the working deck contain that type of card --> similar to actionStart, butStart
+         //will recheck the index number again if it removed something there
+      return numCards;   
+   }
+   //does the working deck contain that type of card
    public boolean workingDeckType(int type){
-       for(int i = 0; i < workingDeck.size(); i++){
-            if(workingDeck.get(i).getType() == type){return true;}
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getType() == type){
+            return true;}
+      }
+      return false;  
+   }     
+   public boolean workingDeckType(String namez){
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getName().equals(namez)){
+            return true;}
       }
       return false;  
    }     
   
-
-      
 }//player deck class end

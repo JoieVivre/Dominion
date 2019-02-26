@@ -12,7 +12,7 @@ public class Supply
    public Supply(int numberPlayers, String supplyString){
             
       trashDeck = new ArrayList<Card>();
-      supply = new Deck[16];
+      supply = new Deck[17];
       attackCard = false;
       attackCounter = new ArrayList<String>();  
       
@@ -26,73 +26,122 @@ public class Supply
 
       Deck estateDeck;
       if(numberPlayers == 2){estateDeck = new Deck(14, 2, "Estate", 1, 2);}                        
-      else if(numberPlayers == 3){estateDeck = new Deck(17, 2, "Estate", 1, 2);}                  
-      else {estateDeck = new Deck(20, 2, "Estate", 1, 2);}                  
+      else if(numberPlayers == 3){estateDeck = new Deck(21, 2, "Estate", 1, 2);}                  
+      else {estateDeck = new Deck(24, 2, "Estate", 1, 2);}                  
       supply[3] = estateDeck;            
       
-      Deck duchyDeck = new Deck(8, 2, "Duchy", 3, 5);  
+      int a = 0;
+      if(numberPlayers == 2){a = 8;}
+      else{a = 12;}
+      
+      Deck duchyDeck = new Deck(a, 2, "Duchy", 3, 5);  
       supply[4] = duchyDeck;
-      Deck provinceDeck = new Deck(8, 2, "Province", 6, 8);
+      Deck provinceDeck = new Deck(a, 2, "Province", 6, 8);
       supply[5] = provinceDeck;
-            
+      
+      Deck curseDeck;
+      if(numberPlayers == 2){curseDeck = new Deck(10, 2, "Curse", -1, 0);}                        
+      else if(numberPlayers == 3){curseDeck = new Deck(20, 2, "Curse", -1, 0);}                  
+      else {curseDeck = new Deck(30, 2, "Curse", -1, 0);}                  
+      supply[6] = curseDeck;                  
             
  //KINGDOM CARDS           
            
    int j = 0;          
-   for(int i = 6; i <= 15; i++){
+   for(int i = 7; i <= 16; i++){
    
       if (supplyString.charAt(j) == 'C'){
-               Deck cellarDeck = new Deck(8, 3, "Cellar", 0, 2);  
-               supply[i] = cellarDeck;               
+         Deck cellarDeck = new Deck(5, 3, "Cellar", 0, 2);  
+         supply[i] = cellarDeck;               
+         }      
+      else if (supplyString.charAt(j) == 'H'){
+         Deck chapelDeck = new Deck(10, 3, "Chapel", 0, 2);  
+         supply[i] = chapelDeck;
          }      
       else if (supplyString.charAt(j) == 'M'){
-         Deck moatDeck = new Deck(8, 3, "Moat", 0, 2);  
+         Deck moatDeck = new Deck(5, 3, "Moat", 0, 2);  
          supply[i] = moatDeck;
          }      
+      else if (supplyString.charAt(j) == 'N'){
+         Deck chancellorDeck = new Deck(10, 3, "Chancellor", 0, 3);
+         supply[i] = chancellorDeck;            
+        }
       else if (supplyString.charAt(j) == 'V'){
-         Deck villageDeck = new Deck(8, 3, "Village", 0, 3);
+         Deck villageDeck = new Deck(5, 3, "Village", 0, 3);
          supply[i] = villageDeck;            
         }
         else if (supplyString.charAt(j) == 'W'){
-          Deck woodcutterDeck = new Deck(8, 3, "Woodcutter", 0, 3);
+          Deck woodcutterDeck = new Deck(10, 3, "Woodcutter", 0, 3);
           supply[i] = woodcutterDeck;            
         }
         else if (supplyString.charAt(j) == 'O'){
-         Deck workshopDeck = new Deck(8, 3, "Workshop", 0, 3);
+         Deck workshopDeck = new Deck(5, 3, "Workshop", 0, 3);
          supply[i] = workshopDeck;            
         }        
+        else if (supplyString.charAt(j) == 'B'){
+         Deck bureaucratDeck = new Deck(5, 3, "Bureaucrat", 0, 4);
+         supply[i] = bureaucratDeck;            
+        }
         else if (supplyString.charAt(j) == 'F'){
-         Deck feastDeck = new Deck(8, 3, "Feast", 0, 4);
+         Deck feastDeck = new Deck(10, 3, "Feast", 0, 4);
          supply[i] = feastDeck;            
         }        
         else if (supplyString.charAt(j) == 'I'){
-         Deck militiaDeck = new Deck(8, 3, "Militia", 0, 4);
+         Deck militiaDeck = new Deck(10, 3, "Militia", 0, 4);
          supply[i] = militiaDeck;            
-        }        
+        } 
+        else if (supplyString.charAt(j) == 'E'){
+         Deck moneylenderDeck = new Deck(10, 3, "Moneylender", 0, 4);
+         supply[i] = moneylenderDeck;            
+        }       
         else if (supplyString.charAt(j) == 'R'){
-         Deck remodelDeck = new Deck(8, 3, "Remodel", 0, 4);
+         Deck remodelDeck = new Deck(10, 3, "Remodel", 0, 4);
          supply[i] = remodelDeck;            
         }        
         else if (supplyString.charAt(j) == 'S'){
-         Deck smithyDeck = new Deck(8, 3, "Smithy", 0, 4);
+         Deck smithyDeck = new Deck(10, 3, "Smithy", 0, 4);
          supply[i] = smithyDeck;            
         }        
+        else if (supplyString.charAt(j) == 'P'){
+         Deck spyDeck = new Deck(5, 3, "Spy", 0, 4);
+         supply[i] = spyDeck;            
+        }
+        else if (supplyString.charAt(j) == 'T'){
+         Deck thiefDeck = new Deck(5, 3, "Thief", 0, 4);
+         supply[i] = thiefDeck;            
+        }
+        else if (supplyString.charAt(j) == 'U'){
+          Deck councilRoomDeck = new Deck(5, 3, "CouncilRoom", 0, 5);
+           supply[i] = councilRoomDeck;            
+        }        
         else if (supplyString.charAt(j) == 'Q'){
-          Deck festivalDeck = new Deck(8, 3, "Festival", 0, 5);
+          Deck festivalDeck = new Deck(10, 3, "Festival", 0, 5);
            supply[i] = festivalDeck;            
         }        
+        else if (supplyString.charAt(j) == 'L'){
+         Deck laboratoryDeck = new Deck(5, 3, "Laboratory", 0, 5);
+         supply[i] = laboratoryDeck;            
+        }
         else if (supplyString.charAt(j) == 'X'){
-         Deck libraryDeck = new Deck(8, 3, "Library", 0, 5);
+         Deck libraryDeck = new Deck(10, 3, "Library", 0, 5);
          supply[i] = libraryDeck;            
         }        
         else if (supplyString.charAt(j) == 'K'){
-           Deck marketDeck = new Deck(8, 3, "Market", 0, 5);
+           Deck marketDeck = new Deck(10, 3, "Market", 0, 5);
            supply[i] = marketDeck;            
         }        
         else if (supplyString.charAt(j) == 'Y'){
-         Deck mineDeck = new Deck(8, 3, "Mine", 0, 5);
+         Deck mineDeck = new Deck(10, 3, "Mine", 0, 5);
          supply[i] = mineDeck;            
         }        
+        else if (supplyString.charAt(j) == 'Z'){
+         Deck witchDeck = new Deck(10, 3, "Witch", 0, 5);
+         supply[i] = witchDeck;            
+        }
+        else if (supplyString.charAt(j) == 'A'){
+         Deck adventurerDeck = new Deck(5, 3, "Adventurer", 0, 6);
+         supply[i] = adventurerDeck;            
+        }
         
         j++;    
    }//for loop --> supply[]
@@ -124,13 +173,13 @@ public class Supply
       for(int i = 0; i < supply.length; i++){
          
          if((buyPower >= supply[i].getCost()) && (supply[i].cardsRemaining() <= 0)){
-            System.out.printf("\t%10s  DECK EMPTY\n", supply[i].getName());
+            System.out.printf("\t%11s  DECK EMPTY\n", supply[i].getName());
          }
          if((buyPower >= supply[i].getCost()) && (supply[i].cardsRemaining() > 0)){
 //            System.out.println("\t" + supply[i].getName() + "  cost-" + supply[i].getCost());
-            System.out.printf("\t%10s  COST - %d\n", supply[i].getName(), supply[i].getCost());
+            System.out.printf("\t%11s  COST - %d\n", supply[i].getName(), supply[i].getCost());
          }
-         if((i == 2) || (i == 5)){System.out.println();}
+         if((i == 2) || (i == 6)){System.out.println();}
       }
    }
    public void canBeBought2(int buyPower, int type){
