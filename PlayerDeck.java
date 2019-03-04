@@ -153,7 +153,14 @@ public class PlayerDeck{
       for(int i = 0; i < workingDeck.size(); i++){
          if(workingDeck.get(i).getType() == type){System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());}
       }  
+   }
+      public void printWorkingDeck(String name){//prints a specific type of card directly to screen
+      System.out.println();
+      for(int i = 0; i < workingDeck.size(); i++){
+         if(workingDeck.get(i).getName().equals(name)){System.out.println("\tindex-" + i + " " + workingDeck.get(i).toString());}
+      }  
    }     
+     
    public boolean printWorkingDeckLast2(){//prints a specific type of card directly to screen
       boolean thief = false;
       System.out.println();
@@ -212,26 +219,48 @@ public class PlayerDeck{
    }//shuffleStart end
   
    //used at games conclusion to determine winner and show victory cards
-   public int victoryPoints(){
+   public int victoryPoints(boolean gardensHere){
       int vPoints = 0;
+      int dominionTotal = deck.size() + discardDeck.size() + workingDeck.size();
+      int extraV = dominionTotal/10;
+      int gardenNum = 0;
+      
       for(int i = 0; i < deck.size(); i++){
          if(deck.get(i).getType() == 2){
             vPoints += deck.get(i).getValue();
             System.out.println(deck.get(i).toString());
          }
+         if(gardensHere){
+            if(deck.get(i).getName().equals("Gardens")){gardenNum++;}
+         }
+
       }
       for(int i = 0; i < discardDeck.size(); i++){
          if(discardDeck.get(i).getType() == 2){
             vPoints += discardDeck.get(i).getValue();
             System.out.println(discardDeck.get(i).toString());         
          }
+         if(gardensHere){
+            if(discardDeck.get(i).getName().equals("Gardens")){gardenNum++;}
+         }
+
       }
       for(int i = 0; i < workingDeck.size(); i++){
          if(workingDeck.get(i).getType() == 2){
             vPoints += workingDeck.get(i).getValue();
             System.out.println(workingDeck.get(i).toString());         
          }
+         if(gardensHere){
+            if(workingDeck.get(i).getName().equals("Gardens")){gardenNum++;}
+         }
       }   
+      
+      if(gardensHere){
+         //need number of garden cards --> have to count them in deck
+         System.out.println("\tThere were " + gardenNum + " Gardens cards in your deck: your total deck size was: " + dominionTotal);
+         System.out.println("\tYou receive " + extraV + " per Gardens card for that deck size and " + (extraV*gardenNum) + " extra Victory points overall.");
+         vPoints += (extraV*gardenNum);
+      }
       return vPoints;
    }
   

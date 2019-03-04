@@ -81,10 +81,12 @@ public class Dominion{
       int temp = 0;
       int winner = 0;
       String winnerName = "";
+      boolean gards = thisGame.gardensOn();
+      
       for(int i = 0; i < turnOrder.size(); i++){
       
          System.out.println(turnOrder.get(i).playerName() + " your score was: "); //+ );
-         temp = turnOrder.get(i).victoryPoints();
+         temp = turnOrder.get(i).victoryPoints(gards);
          if(temp > winner){
             winner = temp;
             winnerName = turnOrder.get(i).playerName();
@@ -98,7 +100,8 @@ public class Dominion{
    public static void playerTurn(PlayerDeck whosTurn, Supply checkSupply, ArrayList<PlayerDeck> turnOrder){//pass player name or number maybe
       Scanner input = new Scanner (System.in);
       int holdoverCoins = 0;
-
+      boolean throneOn = false;
+      int throneInt = 0;
       //ACTION
       System.out.println(whosTurn.playerName() + " ACTION PHASE:");
       if(!whosTurn.workingDeckType(3)){//checking for any action cards      
@@ -106,18 +109,33 @@ public class Dominion{
       }
       else{
          //start of action loop
+               String actionChoice = "";
          do{
-            String actionChoice = "";
+            
             //need to cycle through workingDeck to make sure actually have that card
-            do{
-               System.out.println("Number of actions: " + whosTurn.numActions() + " What action will you play? ");
-               whosTurn.printWorkingDeck();
-               actionChoice = input.next();
-            }while(whosTurn.cardMatch(actionChoice) == -1);
+            if(!throneOn){
+               actionChoice = "";
+               do{
+                  System.out.println("Number of actions: " + whosTurn.numActions() + " What action will you play? ");
+                  whosTurn.printWorkingDeck();
+                  actionChoice = input.next();
+               }while(whosTurn.cardMatch(actionChoice) == -1);
+            }
+            else{
+               throneInt++;
+            }
 
                if(actionChoice.equals("Adventurer")){
                   whosTurn.decAction();
-                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                  
+                  if(throneOn){
+                     System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                     if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+                  }
+                  else{
+                     whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                  }
+                  
                   System.out.println("ADVENTURER: \nDraw until you have 2 additional TREASURE cards in hand.");
                   System.out.println("\tall other cards will be discarded.");
 
@@ -136,8 +154,15 @@ public class Dominion{
                   }while(adventure < 2);  
                }
                else if(actionChoice.equals("Bureaucrat")){
-               whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                  whosTurn.decAction();
+               
+                 if(throneOn){
+                     System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                     if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+                  }
+                  else{
+                     whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                  }
                System.out.println("BUREAUCRAT: \nYou have gained a Silver Card on the top of your deck.");
                System.out.println("\tAll other players must reveal a Victory card in their hand(which will then go on top of their deck)..");
                System.out.println("\t..or a hand with no victory cards.");
@@ -190,7 +215,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Cellar")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
    
                System.out.println("CELLAR: \nyou have gained one additional action (if feasible)");
                whosTurn.incAction();//add 1 action
@@ -243,7 +274,14 @@ public class Dominion{
             }
             else if(actionChoice.equals("Chancellor")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+              
+                if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("CHANCELLOR: \nYou have gained 2 extra gold coins and you may immediately put your remaining deck into the discard pile.");
 
                System.out.print("\tWould you like to discard your remaining deck? ");
@@ -258,7 +296,14 @@ public class Dominion{
             }
             else if(actionChoice.equals("Chapel")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+              
+                if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("CHAPEL: \nTrash up to 4 cards from your hand.");
 
                System.out.print("\tWould you like to trash any cards? ");
@@ -285,7 +330,15 @@ public class Dominion{
             }
             else if(actionChoice.equals("CouncilRoom")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
+               
                System.out.println("COUNCIL ROOM: \nYou gained 4 additional cards and 1 additional buy (if feasible).");
                System.out.println("\tEvery other players gets to draw one card as well.");
                
@@ -302,9 +355,15 @@ public class Dominion{
             }
             else if(actionChoice.equals("Feast")){
                whosTurn.decAction();
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){checkSupply.addTrash(whosTurn.dealCard(whosTurn.cardMatch(actionChoice)));}      
+               }
+               else{
+                  checkSupply.addTrash(whosTurn.dealCard(whosTurn.cardMatch(actionChoice)));//card actually added to trash
+               }
+               
                System.out.println("FEAST: \nTrash this card from you hand, gain a card costing up to 5 coins");
-
-               checkSupply.addTrash(whosTurn.dealCard(whosTurn.cardMatch(actionChoice)));//card actually added to trash
 
                checkSupply.canBeBought(5);
                System.out.println("What card will you take? ");
@@ -313,7 +372,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Festival")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("FESTIVAL: \nYou gained 2 additional actions, 1 additional buy (if feasible,)");
                System.out.println("\tin addition to 2 extra gold coins");
                
@@ -323,7 +388,15 @@ public class Dominion{
             }
             else if(actionChoice.equals("Laboratory")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
+               
                System.out.println("LABORATORY: \n2 cards have been added to your hand and you gained one more Action(if feasible)");
                
                for(int i = 1; i < 3; i++){whosTurn.dealCard();}
@@ -331,7 +404,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Library")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+              if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("LIBRARY: \nDraw until you have 7 cards in hand.");
                System.out.println("\tyou may discard any action cards drawn this way");
              
@@ -355,7 +434,13 @@ public class Dominion{
             else if(actionChoice.equals("Market")){
                //move moat from working Deck to discard   
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("MARKET: \n1 card has been added to your hand, you gained one additional action (if feasible),");
                System.out.println("\t1 additional buy (if feasible), in addition to 1 extra gold coin");
             
@@ -366,7 +451,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Militia")){ 
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));//moved to playArea   
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("MILITIA: \nyou gained 2 additional coins to buy with");
                System.out.println("\tother players will have to discard down to 3 cards NOW if they don't have protection\n");
 
@@ -419,7 +510,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Mine")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("MINE: \nTrash a Treasure card from you hand, gain a treasure card in your hand costing up to 3 more coins than the trashed card");
                //check that there are treasure cards
                if(whosTurn.workingDeckType(1)){
@@ -442,14 +539,26 @@ public class Dominion{
             }
             else if(actionChoice.equals("Moat")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("MOAT: \n2 cards have been added to your hand");
                //add 2 cards to working Deck            
                for(int i = 1; i < 3; i++){whosTurn.dealCard();}              
             }    
             else if(actionChoice.equals("Moneylender")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("MONEYLENDER: \nTrash a copper from your hand, if you do you gain 3 gold coins");
                
                if(whosTurn.workingDeckType("Copper")){
@@ -466,7 +575,13 @@ public class Dominion{
             }                        
             else if(actionChoice.equals("Remodel")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("REMODEL: \nTrash a card from you hand, gain a card costing up to 2 more coins than trashed card");
                //add card to trash, gain additional card            
                whosTurn.printWorkingDeck();
@@ -485,22 +600,26 @@ public class Dominion{
             }
             else if(actionChoice.equals("Smithy")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));   
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("SMITHY: \n3 cards have been added to your hand");
                //add 3 cards to working Deck            
                for(int i = 1; i < 4; i++){whosTurn.dealCard();}              
             }
-            else if(actionChoice.equals("Village")){
-               whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
-               System.out.println("VILLAGE: \n1 card has been added to your hand and you gained two more Actions(if feasible)");
-               //add 1 card to working Deck, +2 actions            
-               whosTurn.dealCard();
-               for(int i = 1; i < 3; i++){whosTurn.incAction();}              
-            }
             else if(actionChoice.equals("Spy")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("SPY: \n1 card has been added to your hand and you gained one more Action(if feasible)");
                System.out.println("\tALL players(including the one who played the Spy) will show the top card of their deck and " + whosTurn.playerName());
                System.out.println("\twill decide if they return the card to their deck or put it in the discard pile.\n");
@@ -539,7 +658,13 @@ public class Dominion{
             }
             else if(actionChoice.equals("Thief")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("THIEF: \nEach player reveals the top 2 cards of their deck:");
                System.out.println("\tif any Treasure cards are revealed, " + whosTurn.playerName() + " may trash one of these cards.");
                System.out.println("\tThe other revealed cards are discarded. " + whosTurn.playerName() + " may gain any/all of trashed Treasure cards.\n");
@@ -611,9 +736,49 @@ public class Dominion{
             
                System.out.println("\tTHIEF ATTACK is now resolved.\n");
             }
+            else if(actionChoice.equals("ThroneRoom")){
+                  whosTurn.decAction();
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+                  System.out.println("THRONE ROOM: \nChoose an action card in your hand: play it twice.\n");
+
+                  whosTurn.printWorkingDeck();
+                  if(whosTurn.workingDeckType(3)){
+                     System.out.println("What action will you play twice: ");
+                     actionChoice = input.next();
+                  //can do input error checking here
+                  
+                     throneOn = true;
+                     throneInt = 0;                  
+                     whosTurn.incAction();
+                     whosTurn.incAction();
+                  }            
+                  else{
+                     System.out.println("You dont't have any more action cards.");
+                  }
+            }
+            else if(actionChoice.equals("Village")){
+               whosTurn.decAction();
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
+               System.out.println("VILLAGE: \n1 card has been added to your hand and you gained two more Actions(if feasible)");
+               //add 1 card to working Deck, +2 actions            
+               whosTurn.dealCard();
+               for(int i = 1; i < 3; i++){whosTurn.incAction();}              
+            }
             else if(actionChoice.equals("Witch")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("WITCH: \n2 cards have been added to your hand and ");
                System.out.println("\tother players will gain a curse card NOW if they don't have protection.\n");
 
@@ -643,9 +808,29 @@ public class Dominion{
                }//for
                System.out.println("\tWITCH ATTACK is now resolved.\n");
             }            
+            else if(actionChoice.equals("Woodcutter")){
+               whosTurn.decAction();
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
+               System.out.println("WOODCUTTER: \nYou gained one additional buy (if feasible), and 2 extra gold coins.");
+            
+               whosTurn.incBuy();
+               holdoverCoins += 2;
+            }
             else if(actionChoice.equals("Workshop")){
                whosTurn.decAction();
-               whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               if(throneOn){
+                  System.out.println("You are Throne Room-ing this action card: " + throneInt + " time.");
+                  if(throneInt >= 2){whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));}      
+               }
+               else{
+                  whosTurn.cardPlayed(whosTurn.cardMatch(actionChoice));
+               }
                System.out.println("WORKSHOP: \nYou gain any of the following cards costing up to 4 coins.");
                //add new card to discard pile
                checkSupply.canBeBought(4);
@@ -659,7 +844,12 @@ public class Dominion{
             }            
             else{
                System.out.print("That's not how that's spelled..");
-            }            
+            }
+            
+               if(throneInt >= 2){
+                  throneOn = false;
+                  throneInt = 0;
+               }            
          }while((whosTurn.numActions() > 0) && (whosTurn.workingDeckType(3)));         
       }//else --> have action card in first place
 

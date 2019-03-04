@@ -27,12 +27,11 @@ public class DominionGameCenter extends Dominion
       System.out.println("\tWhich 10 KINGDOM decks do you want?");
       System.out.println("\tAvailable KINGDOM choices -->");
       
-      //G-Gardens
-      //D-throne room
+      
    
       System.out.println("Cost 2 Coins:\n\tC-Cellar \n\tH-cHapel \n\tM-Moat");
       System.out.println("Cost 3 Coins:\n\tV-Village \n\tW-Woodcutter \n\tO-wOrkshop \n\tN-chaNcellor");
-      System.out.println("Cost 4 Coins:\n\tB-Bureaucrat \n\tF-Feast \n\tI-mIlitia \n\tE-monEylender \n\tR-Remodel \n\tS-Smithy \n\tP-sPy \n\tT-Thief");      
+      System.out.println("Cost 4 Coins:\n\tB-Bureaucrat \n\tF-Feast \n\tG-Gardens \n\tI-mIlitia \n\tE-monEylender \n\tR-Remodel \n\tS-Smithy \n\tP-sPy \n\tT-Thief \n\tD-throne room");      
       System.out.println("Cost 5 Coins:\n\tU-coUncil Room \n\tQ-festival \n\tL-Laboratory \n\tX-library \n\tK-marKet \n\tY-mine \n\tZ-witch");      
       System.out.println("Cost 6 Coins:\n\tA-Adventurer");      
 

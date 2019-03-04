@@ -1,6 +1,6 @@
 C. Atkinson
 
-Version 2.1
+Version 2.2
 
 NEW VERSION UPDATES:
 Action-Attack Kingdom card effects are now resolved on that current turn.  
@@ -9,7 +9,7 @@ Action-Attack Kingdom card effects are now resolved on that current turn.
 Overall this java program is supposed to mimic the deck building game "Dominion" by Rio Grande Games.
 DominionGameCenter main method will launch the play method in Dominion. Right now it is coded to only accept 2-4 players.  
 
-The game is currently coded for all the KINGDOM decks (excluding Gardens and Throne Room). 
+The game is currently coded for all the KINGDOM decks provided in the first box. 
 The Supply for this game includes 10 Kingdom decks with 10 cards each. 
 Descriptions of the Action cards are not provided until after a card is played.
 
