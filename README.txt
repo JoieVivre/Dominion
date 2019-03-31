@@ -1,9 +1,10 @@
 C. Atkinson
 
-Version 2.2
+Version 3.1
 
 NEW VERSION UPDATES:
-Action-Attack Kingdom card effects are now resolved on that current turn.  
+Action-Attack Kingdom card effects are now resolved on that current turn in the correct order.
+Don't ThroneRoom a ThroneRoom just yet.  
 
 
 Overall this java program is supposed to mimic the deck building game "Dominion" by Rio Grande Games.

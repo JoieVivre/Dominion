@@ -27,25 +27,28 @@ public class DominionGameCenter extends Dominion
       System.out.println("\tWhich 10 KINGDOM decks do you want?");
       System.out.println("\tAvailable KINGDOM choices -->");
       
-      
-   
       System.out.println("Cost 2 Coins:\n\tC-Cellar \n\tH-cHapel \n\tM-Moat");
-      System.out.println("Cost 3 Coins:\n\tV-Village \n\tW-Woodcutter \n\tO-wOrkshop \n\tN-chaNcellor");
+      System.out.println("Cost 3 Coins:\n\tN-chaNcellor \n\tV-Village \n\tW-Woodcutter \n\tO-wOrkshop");
       System.out.println("Cost 4 Coins:\n\tB-Bureaucrat \n\tF-Feast \n\tG-Gardens \n\tI-mIlitia \n\tE-monEylender \n\tR-Remodel \n\tS-Smithy \n\tP-sPy \n\tT-Thief \n\tD-throne room");      
       System.out.println("Cost 5 Coins:\n\tU-coUncil Room \n\tQ-festival \n\tL-Laboratory \n\tX-library \n\tK-marKet \n\tY-mine \n\tZ-witch");      
       System.out.println("Cost 6 Coins:\n\tA-Adventurer");      
 
       String kingdomChoices;
+      //auto games and shit
       
+      /*
+      First Game: CMVWOIRSKY 
+      Big Money: HNBFDLKYEA
+      Interaction:
+      Size Distortion:
+      Village Square:
+      */
       do{
          System.out.println("Enter the capital letter associated with each KINGDOM pile, pick 10 capital letters:");
-         System.out.println("FOR EXAMPLE: first game would be - CKIYMRSVWO");
+         System.out.println("FOR EXAMPLE: first game would be - CMVWOIRSKY");
    
          kingdomChoices = input.next();
       }while(kingdomChoices.length() != 10);
-      
-      
-      
       
       play(numPlayers, playerNames, kingdomChoices);
    

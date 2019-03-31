@@ -7,16 +7,13 @@ public class Supply
    private Deck[] supply; //array of deck objects, holds all the piles of cards ever used in game
    private ArrayList<Card> trashDeck;
    private boolean gardensInDeck;
-//   public ArrayList<String> attackCounter;
       
    public Supply(int numberPlayers, String supplyString){
             
       trashDeck = new ArrayList<Card>();
       supply = new Deck[17];
       gardensInDeck = false;
-  //    attackCounter = new ArrayList<String>();  
-      
-      //add curse deck in      
+         
       Deck copperDeck = new Deck(60, 1, "Copper", 1, 0);              
       supply[0] = copperDeck; 
       Deck silverDeck = new Deck(40, 1, "Silver", 2, 3);  
@@ -171,6 +168,12 @@ public class Supply
       System.out.println("\t" + a + " was just trashed.");
       trashDeck.add(a);
    }
+   public Card getFromTrash(){
+      Card temp = trashDeck.get(trashDeck.size()-1);
+      trashDeck.remove(trashDeck.size()-1);
+      return temp;
+   }
+   
    //which decks can be acquired depending on amount
 //do printf   
    public void canBeBought(int buyPower){

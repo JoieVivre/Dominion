@@ -217,7 +217,10 @@ public class PlayerDeck{
    
       cardsAvailable = deck.size();
    }//shuffleStart end
-  
+  public void throneRoom(){
+     workingDeck.add(playArea.get(playArea.size()-1));
+      playArea.remove(playArea.get(playArea.size()-1));
+  }
    //used at games conclusion to determine winner and show victory cards
    public int victoryPoints(boolean gardensHere){
       int vPoints = 0;
